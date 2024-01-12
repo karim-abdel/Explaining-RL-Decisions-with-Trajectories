@@ -1,0 +1,144 @@
+import gym
+import numpy as np
+import d3rlpy
+
+
+# Define your sequence encoder function E
+def sequence_encoder(observation, action, reward):
+    # Dumb data
+    return np.random.rand(128), np.random.rand(64), np.random.rand(32)
+
+
+def offlineRLAlgo(complementary_data):
+    # Train the offline RL agent using SAC
+    # There are 4 versions whcih one should i use???
+    env_name = gym.make("Seaquest-v4")
+    model = SAC('MlpPolicy', env_name, learning_rate=3e-4, batch_size=256)
+    model.learn(total_timesteps=int(1e6))  # Train until saturation
+
+    def policy(state):  # TO modify
+        return model.predict(state)[0]
+    return policy
+
+
+class XMeans:
+    # Replace with your clustering algorithm or use an external library
+
+    def __init__(self):
+        pass
+
+    def fit(self, trajectory_embeddings):
+        # Replace with actual clustering logic
+        # Random cluster assignments for demonstration
+        return np.random.randint(0, 3, len(trajectory_embeddings))
+
+
+def calculateActionDistance(action1, action2):
+    # Replace with the action distance calculation function
+    return np.linalg.norm(action1 - action2)
+
+
+def calculateWassersteinDistance(data_embedding1, data_embedding2):
+    # Replace with the Wasserstein distance calculation function
+    return np.linalg.norm(data_embedding1 - data_embedding2)
+
+# Step (i) - Trajectory Encoding
+
+
+def encodeTrajectories(offline_data, sequence_encoder):
+    trajectory_embeddings = []
+    for trajectory in offline_data:
+        observation_tokens = []
+        action_tokens = []
+        reward_tokens = []
+        for (observation, action, reward) in trajectory:
+            (eo, ea, er) = sequence_encoder(observation, action, reward)
+            observation_tokens.extend(eo)
+            action_tokens.extend(ea)
+            reward_tokens.extend(er)
+        total_tokens = len(observation_tokens) + \
+            len(action_tokens) + len(reward_tokens)
+        trajectory_embedding = np.mean(
+            observation_tokens + action_tokens + reward_tokens) / (3 * total_tokens)
+        trajectory_embeddings.append(trajectory_embedding)
+    return trajectory_embeddings
+
+# Step (ii) - Trajectory Clustering
+
+
+def clusterTrajectories(trajectory_embeddings):
+    # Replace with your clustering algorithm
+    clustering_algo = clustering_library.XMeans()
+    clusters = clustering_algo.fit(trajectory_embeddings)
+    return clusters
+
+# Step (iii) - Data Embedding
+
+
+def generateDataEmbedding(trajectory_embeddings, M, Tsoft):
+    s = np.sum(trajectory_embeddings, axis=0) / M
+    d = np.exp(s / Tsoft) / np.sum(np.exp(s / Tsoft))
+    return d
+
+# Step (iv) - Training Explanation Policies
+
+
+def trainExpPolicies(offline_data, trajectory_embeddings, clusters, offlineRLAlgo):
+    explanation_policies = []
+    data_embeddings = []
+    for cj in clusters:
+        complementary_data = [
+            trajectory for trajectory in offline_data if trajectory not in cj]
+        Tj = [embedding for i, embedding in enumerate(
+            trajectory_embeddings) if i not in cj]
+        policy = offlineRLAlgo(complementary_data)
+        data_embedding = generateDataEmbedding(Tj, M, Tsoft)
+        explanation_policies.append(policy)
+        data_embeddings.append(data_embedding)
+    return explanation_policies, data_embeddings
+
+# Step (v) - Cluster Attribution
+
+
+def generateClusterAttribution(state, original_policy, explanation_policies, original_data_embedding, data_embeddings):
+    original_action = original_policy(state)
+    action_distances = []
+    for policy in explanation_policies:
+        action = policy(state)
+        action_distance = calculateActionDistance(
+            original_action, action)  # Implement this function
+        action_distances.append(action_distance)
+    candidate_clusters = np.argmax(action_distances)
+    w_distances = []
+    for data_embedding in data_embeddings:
+        w_distance = calculateWassersteinDistance(
+            original_data_embedding, data_embedding)  # Implement this function
+        w_distances.append(w_distance)
+    chosen_cluster = np.argmin(w_distances)
+    return chosen_cluster
+
+# Algorithm 6 - Full Algorithm
+
+
+def trajectoryAttribution(offline_data, original_policy):
+    trajectory_embeddings = encodeTrajectories(offline_data, sequence_encoder)
+    clusters = clusterTrajectories(trajectory_embeddings)
+    original_data_embedding = generateDataEmbedding(
+        trajectory_embeddings, M=100, Tsoft=0.1)
+    explanation_policies, data_embeddings = trainExpPolicies(
+        offline_data, trajectory_embeddings, clusters, offlineRLAlgo)
+
+    # Perform cluster attribution for a specific state using generateClusterAttribution function
+    state = np.random.rand(100)  # Placeholder state for demonstration
+    chosen_cluster = generateClusterAttribution(
+        state, original_policy, explanation_policies, original_data_embedding, data_embeddings)
+
+    return chosen_cluster
+
+
+if __name__ == "__main__":
+    # Example usage:
+    offline_data = [...]
+    original_policy = offlineRLAlgo(offline_data)  # Placeholder RL
+    chosen_cluster = trajectoryAttribution(offline_data, original_policy)
+    print("Attributed cluster:", chosen_cluster)
