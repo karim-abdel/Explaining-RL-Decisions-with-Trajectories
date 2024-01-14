@@ -1,34 +1,53 @@
 import numpy as np
 import d3rlpy as d3
+import torch
 import gym
 from RLModels.DiscreteRL import DiscreteModel
 from SeqEncoders.encoder import encodeTrajectories
 from Clustering.XMeans import XMeans
 from Embedders.trainExpPolicy import trainExpPolicies
 from Clustering.ClusterAttribution import generateClusterAttribution
+from decision_transformer_atari.decision_transformer_atari import GPTConfig, GPT
+
 
 
 if __name__ == "__main__":
     # Example usage:
-    # 1. Create an instance of the OfflineRLTrainer class
-    offline_data = DiscreteModel(env_name="Seaquest-v4", dataset_path="Seaquest-v4")
 
-    # Hardcoded offline data with two trajectories
-    offline_data = [
-        [  # First trajectory
-            ([0.1, 0.2, 0.3], [1, 0], 0.5),
-            ([0.4, 0.5, 0.6], [0, 1], 0.6),
-            ([0.7, 0.8, 0.9], [1, 0], 0.7)
-        ],
-        [  # Second trajectory
-            ([0.9, 0.8, 0.7], [0, 1], 0.4),
-            ([0.6, 0.5, 0.4], [1, 0], 0.3),
-            ([0.3, 0.2, 0.1], [0, 1], 0.2)
-        ]
-    ]
 
-    # 2. Encode the trajectories using encodeTrajectories function
-    trajectory_embeddings = encodeTrajectories(offline_data)
+    # Pre-trained Encoder
+    vocab_size = 18 #Need to change this otherwise crashes but is this correct??
+    block_size = 90
+    model_type = "reward_conditioned"
+    timesteps = 2719 #Need to change this otherwise crashes but is this correct??
+
+    mconf = GPTConfig(
+        vocab_size,
+        block_size,
+        n_layer=6,
+        n_head=8,
+        n_embd=128,
+        model_type=model_type,
+        max_timestep=timesteps,
+    )
+    model = GPT(mconf)
+
+    checkpoint_path = "decision_transformer_atari\checkpoints\Seaquest_123.pth"  # or Pong, Qbert, Seaquest
+    
+    if torch.cuda.is_available():
+        checkpoint = torch.load(checkpoint_path)
+    else:
+        print("Be careful you are running on cpu")
+        checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
+    
+    model.load_state_dict(checkpoint)
+
+    # Create an instance of the OfflineRLTrainer class
+    discreteSAC = DiscreteModel(env_name="Seaquest-v4")
+    # Train the model:
+    discreteSAC.train()
+
+    #=============================================================
 
     # 3. Cluster the trajectories using XMeans.
     XMeans = XMeans()
@@ -75,5 +94,4 @@ if __name__ == "__main__":
         state, original_policy, explanation_policies, original_data_embedding, data_embeddings)
 
     print("Attributed cluster:", chosen_cluster)
-
 

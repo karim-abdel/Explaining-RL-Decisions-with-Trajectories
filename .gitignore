@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#File names
+SeaQuestdataset.pkl
+
 # C extensions
 *.so
 
