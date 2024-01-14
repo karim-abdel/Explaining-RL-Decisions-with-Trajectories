@@ -7,8 +7,44 @@ import numpy as np
 import pickle
 
 class DiscreteModel:
+    """
+    A class representing a discrete reinforcement learning model.
+
+    This class provides methods for collecting data, saving data to a dataset file,
+    loading the dataset, initializing the model, training the model, and saving the trained policy model.
+
+    Attributes:
+    - env_name (str): Name of the environment.
+    - actor_lr (float): Learning rate for the actor network.
+    - critic_lr (float): Learning rate for the critic network.
+    - seed (int): Seed value for reproducibility.
+    - use_gpu (bool): Flag indicating whether to use GPU for training.
+    - model: The reinforcement learning model.
+    - env: The environment.
+    - dataset_path (str): Path to the dataset file.
+
+    Methods:
+    - __init__(self, env_name, actor_lr=0.0003, critic_lr=0.0003, seed=42, use_gpu=True, dataset_path='SeaQuestdataset.pkl'): Initializes the DiscreteModel class.
+    - collect_data(self, num_episodes=50, batch_size=25): Collects data by running episodes in the environment.
+    - save_batch(self, observations, actions, rewards, terminals): Save a batch of data to the dataset file.
+    - load_dataset(self): Loads the dataset from a file or collects new data if the file doesn't exist.
+    - initialize_model(self): Initializes the model for reinforcement learning.
+    - train(self, n_epochs=256): Trains the model using the specified number of epochs.
+    - save_model(self, save_path): Saves the trained policy model at the specified save path.
+    """
     
     def __init__(self, env_name, actor_lr=0.0003, critic_lr=0.0003, seed=42, use_gpu=True, dataset_path='SeaQuestdataset.pkl'):
+        """
+        Initializes the DiscreteModel class.
+
+        Parameters:
+        - env_name (str): Name of the environment.
+        - actor_lr (float): Learning rate for the actor network. Default is 0.0003.
+        - critic_lr (float): Learning rate for the critic network. Default is 0.0003.
+        - seed (int): Seed value for reproducibility. Default is 42.
+        - use_gpu (bool): Flag indicating whether to use GPU for training. Default is True.
+        - dataset_path (str): Path to the dataset file. Default is 'SeaQuestdataset.pkl'.
+        """
         self.env_name = env_name
         self.actor_lr = actor_lr
         self.critic_lr = critic_lr
@@ -20,6 +56,16 @@ class DiscreteModel:
         self.dataset_path = dataset_path
 
     def collect_data(self, num_episodes=50, batch_size=25):
+        """
+        Collects data by running episodes in the environment.
+
+        Args:
+            num_episodes (int): The number of episodes to run.
+            batch_size (int): The size of each batch to save.
+
+        Returns:
+            None
+        """
         # Prepare a temporary storage for batch data
         observations, actions, rewards, terminals = [], [], [], []
 
@@ -44,6 +90,18 @@ class DiscreteModel:
                 observations, actions, rewards, terminals = [], [], [], []
 
     def save_batch(self, observations, actions, rewards, terminals):
+        """
+        Save a batch of data to the dataset file.
+
+        Args:
+            observations (list): List of observations.
+            actions (list): List of actions.
+            rewards (list): List of rewards.
+            terminals (list): List of terminal flags.
+
+        Returns:
+            None
+        """
         # Data structure for the batch
         batch_data = {
             'observations': observations,
@@ -68,6 +126,12 @@ class DiscreteModel:
 
 
     def load_dataset(self):
+        """
+        Loads the dataset from a file or collects new data if the file doesn't exist.
+
+        Returns:
+            dataset (MDPDataset): The loaded dataset.
+        """
         # Check if dataset file exists
         if os.path.exists(self.dataset_path):
             print(f"Loading dataset from {self.dataset_path}")
@@ -97,9 +161,27 @@ class DiscreteModel:
 
 
     def initialize_model(self):
+        """
+        Initializes the model for reinforcement learning.
+
+        This method creates an instance of the DSC class with the specified actor and critic learning rates,
+        and sets the use_gpu flag based on the value provided.
+
+        Parameters:
+            self (object): The instance of the class.
+
+        Returns:
+            None
+        """
         self.model = DSC(actor_learning_rate=self.actor_lr, critic_learning_rate=self.critic_lr, use_gpu=self.use_gpu)
 
-    def train(self, n_epochs=100):
+    def train(self, n_epochs=256):
+        """
+        Trains the model using the specified number of epochs.
+
+        Parameters:
+        - n_epochs (int): The number of epochs to train the model (default: 256).
+        """
         # Load the dataset
         dataset = self.load_dataset()
         
@@ -115,9 +197,16 @@ class DiscreteModel:
 
         # Save the trained model
         self.save_model('trained_policy.pth')
-        
-        
-    
+
     def save_model(self, save_path):
+        """
+        Saves the trained policy model at the specified save path.
+
+        Args:
+            save_path (str): The path where the trained policy model will be saved.
+
+        Returns:
+            None
+        """
         self.model.save_policy(save_path)
         print(f"Trained policy saved at: {save_path}")

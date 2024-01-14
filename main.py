@@ -7,46 +7,19 @@ from SeqEncoders.encoder import encodeTrajectories
 from Clustering.XMeans import XMeans
 from Embedders.trainExpPolicy import trainExpPolicies
 from Clustering.ClusterAttribution import generateClusterAttribution
-from decision_transformer_atari.decision_transformer_atari import GPTConfig, GPT
+from decision_transformer_atari.load_model import load_model
 
 
 
 if __name__ == "__main__":
-    # Example usage:
-
-
-    # Pre-trained Encoder
-    vocab_size = 18 #Need to change this otherwise crashes but is this correct??
-    block_size = 90
-    model_type = "reward_conditioned"
-    timesteps = 2719 #Need to change this otherwise crashes but is this correct??
-
-    mconf = GPTConfig(
-        vocab_size,
-        block_size,
-        n_layer=6,
-        n_head=8,
-        n_embd=128,
-        model_type=model_type,
-        max_timestep=timesteps,
-    )
-    model = GPT(mconf)
-
-    checkpoint_path = "decision_transformer_atari\checkpoints\Seaquest_123.pth"  # or Pong, Qbert, Seaquest
-    
-    if torch.cuda.is_available():
-        checkpoint = torch.load(checkpoint_path)
-    else:
-        print("Be careful you are running on cpu")
-        checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
-    
-    model.load_state_dict(checkpoint)
-
+    #Pre trained model from hugface
+    pre_trained_encoder = load_model()
     # Create an instance of the OfflineRLTrainer class
     discreteSAC = DiscreteModel(env_name="Seaquest-v4")
     # Train the model:
     discreteSAC.train()
 
+    # Here is where is stoped working
     #=============================================================
 
     # 3. Cluster the trajectories using XMeans.
