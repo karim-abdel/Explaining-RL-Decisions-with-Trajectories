@@ -3,26 +3,24 @@ import d3rlpy as d3
 import torch
 import gym
 from RLModels.DiscreteRL import DiscreteModel
-from SeqEncoders.encoder import encodeTrajectories
 from Clustering.XMeans import XMeans
 from Embedders.trainExpPolicy import trainExpPolicies
 from Clustering.ClusterAttribution import generateClusterAttribution
 from decision_transformer_atari.load_model import load_model
+from data.makeSeaquestdata import load_dataset
 
 
 
 if __name__ == "__main__":
     #Pre trained model from hugface
+    seaquestdata = load_dataset(env_name='Seaquest-v4', dataset_path='data/SeaQuestdataset.pkl', seed=42)
     pre_trained_encoder = load_model()
-    # Create an instance of the OfflineRLTrainer class
-    discreteSAC = DiscreteModel(env_name="Seaquest-v4")
-    # Train the model:
-    discreteSAC.train()
 
-    # Here is where is stoped working
-    #=============================================================
+    for trajectory in seaquestdata:
+        print(trajectory)
+        trajectory_embedding = pre_trained_encoder.state_encoder(trajectory)
 
-    # 3. Cluster the trajectories using XMeans.
+    # 2. Cluster the trajectories using XMeans.
     XMeans = XMeans()
     clusters = XMeans.clusterTrajectories(trajectory_embeddings)
 
@@ -65,6 +63,11 @@ if __name__ == "__main__":
 
     chosen_cluster = generateClusterAttribution(
         state, original_policy, explanation_policies, original_data_embedding, data_embeddings)
+    
+    # Create an instance of the OfflineRLTrainer class
+    discreteSAC = DiscreteModel()
+    # Train the model:
+    discreteSAC.train(chosen_cluster, n_epochs=256)
 
-    print("Attributed cluster:", chosen_cluster)
-
+    # Save the trained model
+    discreteSAC.save_model('trained_model.pt')
