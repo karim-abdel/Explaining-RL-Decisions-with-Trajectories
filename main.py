@@ -16,9 +16,12 @@ if __name__ == "__main__":
     seaquestdata = load_dataset(env_name='Seaquest-v4', dataset_path='data/SeaQuestdataset.pkl', seed=42)
     pre_trained_encoder = load_model()
 
-    for trajectory in seaquestdata:
-        print(trajectory)
-        trajectory_embedding = pre_trained_encoder.state_encoder(trajectory)
+    trajectory_embeddings = []
+
+    for episode in seaquestdata:
+        print(episode.observations.shape,  episode.actions.shape, episode.rewards.shape)
+        trajectory_embedding = pre_trained_encoder.state_encoder(episode.observations, episode.actions, episode.rewards)
+        trajectory_embeddings.append(trajectory_embedding)
 
     # 2. Cluster the trajectories using XMeans.
     XMeans = XMeans()
