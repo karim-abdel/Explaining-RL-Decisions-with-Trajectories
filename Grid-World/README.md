@@ -1,5 +1,20 @@
 This folder is regarding experiments of 'Explaining RL Decisions with Trajectories': A Reproducibility Study. 
 
+## Instructions for usage:
+
+1. Before running the code-base, install the dependencies using:
+    ```
+        conda create -n xrl python=3.8 -y
+        conda activate xrl
+        pip install -r requirements.txt
+        python -m ipykernel install --user --name xrl
+    ```
+
+2. Launch `gridworld_expts.ipynb` using a jupyter server. Activate the `xrl` kernel and run the file to generate the results from the paper.
+
+__Acknowledgements__: We use Dynamic Programming implementation from [andrecianflone/dynaq/](https://github.com/andrecianflone/dynaq/) and we are thankful to the authors for making it publicly available.
+
+## Files description:
 
 The files are concerning the following parts of our study:
 
