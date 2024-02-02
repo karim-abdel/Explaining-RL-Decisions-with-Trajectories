@@ -35,3 +35,6 @@ If you use this code for your research, please cite our paper:
       primaryClass={cs.AI}
 }
 ```
+
+ADDITIONAL EXPERIMENTS FOR THE CLAIMS RTISV AND DTAD
+The data used are the offline_traj.pkl in the respective folder. Results are completely reproducible. Use the xlr environment and run the notebook.
