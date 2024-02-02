@@ -1,5 +1,10 @@
 This folder is regarding experiments of 'Explaining RL Decisions with Trajectories': A Reproducibility Study. 
 
+
+![image](https://github.com/karim-abdel/FACT/assets/93334470/5d5b14e7-7137-473a-8ade-178a5e4b7aeb)
+
+
+
 ## Files description:
 
 The files are concerning the following parts of our study:
