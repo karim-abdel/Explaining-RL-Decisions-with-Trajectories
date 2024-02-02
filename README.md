@@ -5,6 +5,7 @@ This is the code-base for 'Explaining RL Decisions with Trajectories': A Reprodu
 ---
 Here we provide the code for the gridworld experiments, which can be found in the Grid-World folder. 
 In case of additional queries, feel free to reach out to one of the authors.
+
 ---
 
 ## Instructions for usage:
