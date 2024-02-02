@@ -1,9 +1,12 @@
-This is the code-base for 'Explaining RL Decisions with Trajectories' published at ICLR 2023.
+This is the code-base for 'Explaining RL Decisions with Trajectories': A Reproducibility Study.
 
-[Quick Blog](https://sites.google.com/view/iclr2023-rl-traj-attribution/home/) |  [Full Paper](https://arxiv.org/abs/2305.04073)
+[Other Potential Lik]( - ) |  [Full Paper]( - )
 
 ---
-Here we provide the code for the gridworld experiments, which can be found in the _gridworld_expts.ipynb_ file. We hope the implementation for other environments would be clear from this example. In case of additional queries, feel free to reach out at: svdeshmukh@umass.edu
+Here we provide the code for the gridworld experiments, which can be found in the GridWorld folder. 
+
+
+We hope the implementation for other environments would be clear from this example. In case of additional queries, feel free to reach out at: svdeshmukh@umass.edu
 
 ---
 
