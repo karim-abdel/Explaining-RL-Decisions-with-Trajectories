@@ -11,13 +11,20 @@ This repository contains the codebase for our reproducibility study on "Explaini
 
 The project is divided into two main parts, each contained in its own directory with dedicated `requirements.txt` files and `README` for setup instructions:
 
-- **Grid-World Experiments:** Located in the `Grid-World` folder, this part includes all necessary code to replicate the gridworld experiments described in the original study.
-- **Seaquest and Half Cheetah Experiments:** The `Seaquest_HalfCheetah` folder contains code for replicating experiments on the Seaquest and Half Cheetah environments.
+- **Grid-World Experiments:** Located in the `Grid-World` folder, this part includes all necessary code to replicate the gridworld experiments described in the original study and to perform additional experiments from our paper.
+- **Seaquest and Half Cheetah Experiments:** The `Seaquest_HalfCheetah` folder contains code for replicating experiments on the Seaquest and Half Cheetah environments and to conduct the supplementary experiments described in our paper
 
 ## Getting Started
 
 Please refer to the `README.md` file within each directory for detailed instructions on setting up and running the experiments.
 
-## Contact
+## Contact Information
 
-Should you have any questions or require further clarification, please do not hesitate to reach out to the authors.
+For any queries, suggestions, or discussions regarding the project, feel free to contact the authors:
+
+- **Author 1**: Karim Abdel Sadek - karim.abdel.sadek@student.uva.nl
+- **Author 2**: Matteo Nulli - matteo.nulli@student.uva.nl
+- **Author 3**: Joan Velja - joan.velja@student.uva.nl
+- **Author 3**: Jort Vincenti - jort.vincenti@student.uva.nl
+
+Alternatively, you can raise an issue in this repository for any specific questions or suggestions related to the codebase.
