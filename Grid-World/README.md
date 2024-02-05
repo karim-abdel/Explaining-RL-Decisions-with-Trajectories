@@ -1,10 +1,4 @@
-## FACT:
-
-- Fairness, Accountability, Confidentiality and Transparency in AI
-- First Year - Third Period
-- Master of Artificial Intelligence @Uva
-
-## Overview:
+## Overview
 This folder is regarding experiments of 'Explaining RL Decisions with Trajectories': A Reproducibility Study. 
 We focus on reproducing experiments for the **Grid-World** Environment.
 
@@ -13,7 +7,7 @@ We focus on reproducing experiments for the **Grid-World** Environment.
 
 
 
-## Files description:
+## Files description
 
 The files are concerning the following parts of our study:
 
@@ -23,7 +17,7 @@ The files are concerning the following parts of our study:
 4. `Additional_Experiments_DTDA_RTISV` folder contains files regarding additional experiments for claim Distant Trajectories infulencing Decision of the Agent (DTDA) and Removing Trajectories induces a lower Initial State Value (RTISV). 
 
 
-## Instructions for usage:
+## Instructions for usage
 
 1. Before running the code-base, install the dependencies using:
     ```
