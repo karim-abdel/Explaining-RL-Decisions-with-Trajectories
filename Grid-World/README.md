@@ -1,7 +1,8 @@
 ## FACT:
-Fairness, Accountability, Confidentiality and Transparency in AI
-First Year - Third Period
-Master of Artificial Intelligence @Uva
+
+- Fairness, Accountability, Confidentiality and Transparency in AI
+- First Year - Third Period
+- Master of Artificial Intelligence @Uva
 
 ## Overview:
 This folder is regarding experiments of 'Explaining RL Decisions with Trajectories': A Reproducibility Study. 
