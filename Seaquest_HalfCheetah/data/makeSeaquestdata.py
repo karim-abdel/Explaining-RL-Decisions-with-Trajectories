@@ -1,35 +1,36 @@
 import gym
 from utils import stack_frames
-import gzip
-import numpy as np
+#import gzip # This is not needed, we had a dataset in .gz format which we couldnt load in GitHub
 import copy
+from eorl import OfflineDataset
+import numpy as np
 
 def load_seaquest_dataset(env_name, size = 717):
     # Initialize the OfflineDataset with specified parameters
-    # ds = OfflineDataset(
-    # env = env_name,            # pass name in supported environments below
-    # dataset_size = 1e6,   # [0, 1e6) frames of atari
-    # train_split = 0.9,       # 90% training, 10% held out for testing
-    # obs_only = False,        # only get observations (no actions, rewards, dones)
-    # framestack = 1,          # number of frames per sample
-    # shuffle = False,         # chronological samples if False, randomly sampled if true
-    # stride = 1,               # return every stride`th chunk (where chunk size == `framestack)
-    # verbose = 1,              # 0 = silent, >0 for reporting
-    # )
+    ds = OfflineDataset(
+    env = env_name,            # pass name in supported environments below
+    dataset_size = 1e6,   # [0, 1e6) frames of atari
+    train_split = 0.9,       # 90% training, 10% held out for testing
+    obs_only = False,        # only get observations (no actions, rewards, dones)
+    framestack = 1,          # number of frames per sample
+    shuffle = False,         # chronological samples if False, randomly sampled if true
+    stride = 1,               # return every stride`th chunk (where chunk size == `framestack)
+    verbose = 1,              # 0 = silent, >0 for reporting
+    )
 
-    # # Extract the dataset
-    # dataset = {
-    #     'observations': ds.dataset['observation'],
-    #     'actions': ds.dataset['action'],
-    #     'rewards': ds.dataset['reward'],
-    #     'terminals': ds.dataset['terminal']
-    # }
+    # Extract the dataset
+    datasets = {
+        'observations': ds.dataset['observation'],
+        'actions': ds.dataset['action'],
+        'rewards': ds.dataset['reward'],
+        'terminals': ds.dataset['terminal']
+    }
 
-    datasets_names = ["observations", "actions", "rewards", "terminals"]
-    datasets = {}
-    for dataset_name in datasets_names:
-        with gzip.open("Seaquest_HalfCheetah/data/sq_data/"+dataset_name+".gz", 'rb') as f:
-            datasets[dataset_name] = np.load(f, allow_pickle=False)
+    # datasets_names = ["observations", "actions", "rewards", "terminals"]
+    # datasets = {}
+    # for dataset_name in datasets_names:
+    #     with gzip.open("Seaquest_HalfCheetah/data/sq_data/"+dataset_name+".gz", 'rb') as f:
+    #         datasets[dataset_name] = np.load(f, allow_pickle=False)
     
     print("Dataset loaded")
     seaquest_length = np.where(np.cumsum(datasets["terminals"]) == size)[0][0]  # Note if terminals are not binary this will not work.
