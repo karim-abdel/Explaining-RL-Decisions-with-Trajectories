@@ -1,9 +1,3 @@
-# FACT
-
-- Fairness, Accountability, Confidentiality and Transparency in AI
-- First Year - Third Period
-- Master of Artificial Intelligence @Uva
-
 #### This part will focus on the requirements for Seaquest:
 
 - Due to the versions of the imports a 3.8 python version is required.
