@@ -2,7 +2,8 @@
 This folder is regarding experiments of 'Explaining RL Decisions with Trajectories': A Reproducibility Study. 
 We focus on reproducing experiments for the **Seaquest** and **HalfCheetah** Environments.
 
-#### This part will focus on the requirements for Seaquest:
+
+## This part will focus on the requirements for Seaquest:
 
 - Due to the versions of the imports a 3.8 python version is required.
   -- py -3.8 -m venv factvenv
@@ -17,7 +18,7 @@ We focus on reproducing experiments for the **Seaquest** and **HalfCheetah** Env
   -- git clone https://huggingface.co/edbeeching/decision_transformer_atari
   -- Note: Do not forget to create an init.py file in the folder such that load_model.py can import the functions.
 
-#### This part will focus on the requirements for HalfCheetah:
+## This part will focus on the requirements for HalfCheetah:
 
 - Install required dataset and follow their requirements:
   -- pip install git+https://github.com/Farama-Foundation/d4rl@master#egg=d4rl
@@ -34,7 +35,7 @@ https://github.com/openai/mujoco-py/issues/298
 Then Download the transformer:
 pip install git+https://github.com/JannerM/doodad.git@janner
 
-### Finally:
+## Finally:
 
 - Install all the requirements using
   ```
@@ -42,7 +43,7 @@ pip install git+https://github.com/JannerM/doodad.git@janner
   pip install codecarbon
   ```
 
-#### Trouble shooting:
+## Trouble shooting:
 
 - Try to pip install numpy seperatly before the requirements.txt file
 - Try to pip install Cython seperatly before the requirements.txt file
