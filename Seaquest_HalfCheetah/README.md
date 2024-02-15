@@ -1,3 +1,7 @@
+## Overview
+This folder is regarding experiments of 'Explaining RL Decisions with Trajectories': A Reproducibility Study. 
+We focus on reproducing experiments for the **Seaquest** and **HalfCheetah** Environments.
+
 #### This part will focus on the requirements for Seaquest:
 
 - Due to the versions of the imports a 3.8 python version is required.
