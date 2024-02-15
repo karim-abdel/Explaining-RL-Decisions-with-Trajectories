@@ -1,4 +1,4 @@
-# Explaining RL Decisions with Trajectories: A Reproducibility Study
+# 'Explaining RL Decisions with Trajectories': A Reproducibility Study
 
 This repository contains the codebase for our reproducibility study on "Explaining RL Decisions with Trajectories." Our work is conducted in the context of the Fairness, Accountability, Confidentiality, and Transparency in AI course offered by the University of Amsterdam.
 
