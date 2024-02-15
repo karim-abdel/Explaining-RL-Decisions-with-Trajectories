@@ -25,6 +25,7 @@ The files are concerning the following parts of our study:
         conda activate xrl
         pip install -r requirements.txt
         python -m ipykernel install --user --name xrl
+        pip install codecarbon
     ```
 
 2. Launch any of the `.ipynb` file using a jupyter server. Activate the `xrl` kernel and run the file to generate the results from the paper.
