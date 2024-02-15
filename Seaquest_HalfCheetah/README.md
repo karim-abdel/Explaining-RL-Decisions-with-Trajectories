@@ -38,8 +38,11 @@ pip install git+https://github.com/JannerM/doodad.git@janner
 
 ### Finally:
 
-- Install all the requirements using pip install -r requirements.txt
-- Install Codecarbon Tool using pip install codecarbon
+- Install all the requirements using
+  ```
+  pip install -r requirements.txt
+  pip install codecarbon
+  ```
 
 #### Trouble shooting:
 
