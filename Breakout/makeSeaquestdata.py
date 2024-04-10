@@ -34,7 +34,7 @@ def load_seaquest_dataset(env_name, size = 717):
     
     print("Dataset loaded")
     seaquest_length = np.where(np.cumsum(datasets["terminals"]) == size)[0][0]  # Note if terminals are not binary this will not work.
-
+    print(seaquest_length)
     datasets['observations'] = stack_frames(datasets['observations'][:seaquest_length])
     datasets['actions'] = datasets['actions'][:seaquest_length]
     datasets['rewards'] = datasets['rewards'][:seaquest_length]

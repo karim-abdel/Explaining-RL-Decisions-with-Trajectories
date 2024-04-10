@@ -19,10 +19,15 @@ if __name__ == "__main__":
     device = set_seeds(seed=0)
 
     # Set data and test sizes
-    data_size, test_size = 617, 100
+    data_size, test_size = 100, 10
 
     # Load Seaquest dataset
     seaquestdata, sq_env = load_seaquest_dataset(env_name='Breakout', size=data_size+test_size)
+
+    print(seaquestdata["observations"][0])
+    print(seaquestdata["actions"][:10])
+    print(seaquestdata["rewards"][:10])
+    print(seaquestdata["terminals"][:10])
 
     # Load pre-trained encoders
     pre_trained_encoder_seaquest = load_seaquest_model("decision_transformer_atari/checkpoints/Breakout_123.pth", seed=0)
@@ -41,12 +46,13 @@ if __name__ == "__main__":
     )
 
     # Perform clustering on Seaquest data
-    clusters_seaquest, _ = perform_clustering_and_plot(trajectory_embedding_seaquest.detach().cpu().numpy(), 2, 8, ccore=True, plot=False)
+    clusters_seaquest, _ = perform_clustering_and_plot(trajectory_embedding_seaquest.detach().cpu().numpy(), 2, 8, ccore=True, plot=True)
 
     # Train Seaquest model with DiscreteSAC
     print('#' * 100)
     print("Training Seaquest with DiscreteSAC...")
     list_episodes_sq = make_episodes(final_obs_sq, final_act_sq, final_rew_sq, 4)
+    print(list_episodes_sq[0])
     sac_sq = fit_discrete_sac(list_episodes_sq, n_steps=10, n_steps_per_epoch=10, device=device)
 
 
