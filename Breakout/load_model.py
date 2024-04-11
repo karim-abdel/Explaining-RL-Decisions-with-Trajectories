@@ -21,7 +21,7 @@ def set_seed(seed):
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
 
-def load_seaquest_model(checkpoint_path="decision_transformer_atari\checkpoints\Seaquest_123.pth", seed=0):
+def load_seaquest_model(checkpoint_path="decision_transformer_atari\checkpoints\Seaquest_123.pth", vocab_size= 4, block_size=90, timesteps=2654, seed=0):
     """
     Load the Seaquest model from a checkpoint file.
 
@@ -33,10 +33,10 @@ def load_seaquest_model(checkpoint_path="decision_transformer_atari\checkpoints\
     """
     set_seed(seed)
 
-    vocab_size = 4
-    block_size = 90
+    vocab_size = vocab_size
+    block_size = block_size
     model_type = "reward_conditioned"
-    timesteps = 2654
+    timesteps = timesteps
 
     mconf = GPTConfig(
         vocab_size,

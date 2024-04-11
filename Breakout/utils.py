@@ -259,54 +259,59 @@ def perform_clustering_and_plot(traj_embeddings, amount_initial_centers, max_clu
     return clusters, traj_cluster_labels
 
 def trajectory_attributions_sq(test_observations, models, traj_embeddings, clusters):
-    distances = []
     attributions = []
-    new_actions = []
     data_embedding = get_data_embedding(traj_embeddings)
     # First model is trained on full dataset
     # Second model is trained on cluster 1
     # Third model is trained on cluster 2 ...
     original_model = models[0][0]
     original_data_embedding = models[0][1]
-    
-    distances = np.zeros((len(test_observations), len(models) -1), dtype=np.float32)
     for i in range (len(test_observations)):
+        print('#' * 100, f'Observation {i + 1}', '#' * 100)
+        print
         t = test_observations[i]
+        print(t.shape)
+        # plt.imshow(t[0][0], cmap='gray')
+        # plt.savefig(f'test_observation_{i + 1}.png')
         original_action = original_model.predict(t)
         sub_dist = []
         for k in models:
-            if k == 0:
-                continue
-            #v[0] # modello
+            #v[0] # model
             #v[1] # data_embedding
             model = models[k][0]
             data_embedding = models[k][1]
 
             action = model.predict(t)
+            print(f"{k}-th model predicted action:", action)
+            print("Original model's action", original_action)
 
             if action != original_action:
                 w_d = wasserstein_distance(original_data_embedding, data_embedding)
+                print("Wasserstein distance: ", w_d)
             else:
                 w_d = 1e9
             
             sub_dist.append(w_d)
-            distances[i,k-1] = w_d
         
-        responsible_data_combination = np.argsort(sub_dist)[0]
+        print("DEBUG: len(sub_dist)", len(sub_dist))
+        print("DEBUG: sub_dist", sub_dist)
+        print("DEBUG: np.argsort(sub_dist)", np.argsort(sub_dist))
+        responsible_data_combination = np.argsort(sub_dist)[0] - 1
+        print("Responsible data combination: ", responsible_data_combination)
 
         if sub_dist[responsible_data_combination] == 1e9 or sub_dist[responsible_data_combination] == 0:
             print("No attribution found")
+            print(sub_dist[responsible_data_combination])
             continue
-        else:
-            attributions.append({
-                        'models': [v[0] for v in models.values()],
-                        'orig_act': original_action,
-                        'new_act': action,
-                        'attributed_trajs': clusters[responsible_data_combination],
-                        'responsible_cluster': responsible_data_combination
-                    })
     
-    assert len(attributions) == len(test_observations)
+        attributions.append({
+                    'models': [v[0] for v in models.values()],
+                    'orig_act': original_action,
+                    'new_act': action,
+                    'attributed_trajs': clusters[responsible_data_combination],
+                    'responsible_cluster': responsible_data_combination
+                })
+    
     return attributions
 
 

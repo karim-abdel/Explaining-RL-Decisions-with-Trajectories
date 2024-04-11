@@ -107,29 +107,21 @@ def fit_per_cluster(model,
                     clusters, 
                     trajectory_embedding, 
                     test_observations):
-    #result_data_combinations = {0:(actions[0], action_values[0], get_data_embedding(data_embedding))} # Original dataset policy
-    #result_data_combinations = {}
-    #cluster_embeddings = {}
-
-    # model requires a batch of observations, so we need to add a dimension to the test observation
-    #test_observation = np.expand_dims(test_observation, axis=0)
-
+    
     original_actions = []
     original_action_values = []
     for t in test_observations:
         action = model.predict(t)
-        #print("Original model action: ", action)
+        print("Original model action: ", action)
         action_value = model.predict_value(t, action = action)
-        #print("Original model action value: ", action_value)
-        #print("Passing: ", action[0], action_value[0])
+        print("Original model action value: ", action_value)
+        print("Passing: ", action[0], action_value[0])
         original_actions.append(action[0])
         original_action_values.append(action_value[0])
 
     result_data_combinations = {0:(original_actions, original_action_values, get_data_embedding(data_embedding))} # Original dataset policy
-
     models = {0:(model, get_data_embedding(data_embedding))}
     
-    #print("Debug: ", len(clusters))
     for cluster_id, cluster in enumerate(clusters):
         model = model_class(**model_params)
         count_in_clusters = 0
@@ -151,50 +143,24 @@ def fit_per_cluster(model,
         
         # Generate the data embedding
         data_embedding_new = get_data_embedding(temp_traj_embeds)
-        #print("Data embedding new: ", data_embedding_new.shape)
-        
-        # Generate cluster embedding
-        #cluster_embedding = get_data_embedding(temp_cluster_traj_embeds)
-        
         # Train an agent on the new data
         model.fit(temp_data, n_steps=10, n_steps_per_epoch=1)
 
         models[cluster_id + 1] = (model, data_embedding_new)
-        
-
-        # actions = []
-        # action_values = []
-        # for x in range(len(temp_data)):
-        #     print("Debug:", temp_data[x].observations[0].shape)
-        #     action = model.predict(temp_data[x].observations)[0]
-        #     #print("Debug:", action)
-        #     actions.append(action)
-        #     #print("Predicted action: ", action)
-        #     action_value = model.predict_value(temp_data[x].observations, action = action)[0]
-        #     action_values.append(action_value)
 
         new_actions = []
         new_action_values = []
         for t in test_observations:
             action = model.predict(t)
-            #print("New model action: ", action)
+            print("New model action: ", action)
             action_value = model.predict_value(t, action = action)
-            #print("New model action value: ", action_value)
-            #print("Passing: ", action[0], action_value[0])
+            print("New model action value: ", action_value)
+            print("Passing: ", action[0], action_value[0])
 
             new_actions.append(action[0])
             new_action_values.append(action_value[0])
         
-        #actions = np.array(actions).flatten()
-        #print("Actions: ", actions.shape)
-        
-        # Collect the data embedding and the trajectory
-        #result_data_combinations[cluster_id + 1] = (torch.as_tensor(actions), torch.as_tensor(action_values), data_embedding_new) # Clustered dataset policy (cluster_id + 1 because 0 is the original dataset)
-                                                                                 # so each value is the model trained on original data - cluster 1, original data - cluster 2, etc.
-        #cluster_embeddings[cluster_id] = cluster_embedding
-
         result_data_combinations[cluster_id + 1] = (new_actions, new_action_values, data_embedding_new) # Clustered dataset policy (cluster_id + 1 because 0 is the original dataset)
                                                                                     # so each value is the model trained on original data - cluster 1, original data - cluster 2, etc.
         
     return models, result_data_combinations
-    #return result_data_combinations, cluster_embeddings
