@@ -296,7 +296,7 @@ def trajectory_attributions_sq(test_observations, models, traj_embeddings, clust
         print("DEBUG: len(sub_dist)", len(sub_dist))
         print("DEBUG: sub_dist", sub_dist)
         print("DEBUG: np.argsort(sub_dist)", np.argsort(sub_dist))
-        responsible_data_combination = np.argsort(sub_dist)[0] - 1
+        responsible_data_combination = np.argsort(sub_dist)[0] #- 1
         print("Responsible data combination: ", responsible_data_combination)
 
         if sub_dist[responsible_data_combination] == 1e9 or sub_dist[responsible_data_combination] == 0:
@@ -419,19 +419,35 @@ def print_results_sq(result_data_combinations_sq, test_observations, models_sq, 
     # to compare with original actions, use result_data_comb[0][0]
     # compare for each cluster i, the actions with the original actions and count the number of actions that are the same
     action_comparison = {}
+    test_ivs = []
     for data_combination_id, (action_new, action_value_new, data_embedding_new) in result_data_combinations_sq.items():
-        action_comparison[data_combination_id] = 0
-        for t in range(len(test_observations)):
-            assert len(action_new) == len(test_observations)
-            if (action_new[t] == result_data_combinations_sq[0][0][t]):
-                action_comparison[data_combination_id] += 1
+        test_ivs.append(action_value_new)
     
-    print(np.array(list(action_comparison.values()))/(len(test_observations)))
+    print("ivs values")
+    print(np.array(test_ivs).mean(axis=1))
+    
 
     print('Avg Delta Q')
     for data_combination_id, (_, action_values_new, data_embedding_new) in result_data_combinations_sq.items():
         print(np.sum(np.abs(np.array(action_values_new) - np.array(result_data_combinations_sq[0][1])))/(len(test_observations) - 1))
+
     
+    # result_data_comb[i][0] --> cluster i action
+    # to compare with original actions, use result_data_comb[0][0]
+    # compare for each cluster i, the actions with the original actions and count the number of actions that are the same
+    print("-"*100)
+    action_comparison = {}
+    for data_combination_id, (action_new, action_value_new, data_embedding_new) in result_data_combinations_sq.items():
+        action_comparison[data_combination_id] = 0
+        for t in range(len(test_observations)):
+            assert len(action_new) == len(test_observations)
+            print(action_comparison[data_combination_id], result_data_combinations_sq[0][0][t], action_new[t])
+            if (action_new[t] == result_data_combinations_sq[0][0][t]):
+                action_comparison[data_combination_id] += 1
+    print("-"*100)
+    print("Comparing the actions")
+    print(np.array(list(action_comparison.values()))/(len(test_observations)))
+
     data_embedding_original = models_sq[0][1]
     print("Data distances")
     data_distances = np.zeros(len(result_data_combinations_sq))

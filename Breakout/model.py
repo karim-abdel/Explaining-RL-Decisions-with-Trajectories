@@ -144,7 +144,7 @@ def fit_per_cluster(model,
         # Generate the data embedding
         data_embedding_new = get_data_embedding(temp_traj_embeds)
         # Train an agent on the new data
-        model.fit(temp_data, n_steps=10, n_steps_per_epoch=1)
+        model.fit(temp_data, n_steps=100, n_steps_per_epoch=10)
 
         models[cluster_id + 1] = (model, data_embedding_new)
 

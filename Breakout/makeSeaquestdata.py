@@ -31,10 +31,11 @@ def load_seaquest_dataset(env_name, size = 717):
     # for dataset_name in datasets_names:
     #     with gzip.open("Seaquest_HalfCheetah/data/sq_data/"+dataset_name+".gz", 'rb') as f:
     #         datasets[dataset_name] = np.load(f, allow_pickle=False)
+    #print("Number of terminal states is...", datasets['terminals'].sum())
     
     print("Dataset loaded")
     seaquest_length = np.where(np.cumsum(datasets["terminals"]) == size)[0][0]  # Note if terminals are not binary this will not work.
-    print(seaquest_length)
+    print(sum(datasets["terminals"]))
     datasets['observations'] = stack_frames(datasets['observations'][:seaquest_length])
     datasets['actions'] = datasets['actions'][:seaquest_length]
     datasets['rewards'] = datasets['rewards'][:seaquest_length]
