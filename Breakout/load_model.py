@@ -33,10 +33,25 @@ def load_seaquest_model(checkpoint_path="decision_transformer_atari\checkpoints\
     """
     set_seed(seed)
 
-    vocab_size = vocab_size
-    block_size = block_size
+    # vocab_size = vocab_size
+    # block_size = block_size
+    # model_type = "reward_conditioned"
+    # timesteps = timesteps
+
+    # mconf = GPTConfig(
+    #     vocab_size,
+    #     block_size,
+    #     n_layer=6,
+    #     n_head=8,
+    #     n_embd=128,
+    #     model_type=model_type,
+    #     max_timestep=timesteps,
+    # )
+
+    vocab_size = 18 # 18 for Seaquest
+    block_size = 90
     model_type = "reward_conditioned"
-    timesteps = timesteps
+    timesteps = 2719 # 2719 for Seaquest
 
     mconf = GPTConfig(
         vocab_size,

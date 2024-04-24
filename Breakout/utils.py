@@ -186,7 +186,7 @@ def get_trajectory_embedding(model, observations, actions, rewards, is_seaquest=
     return trajectory_embedding
 
 
-def perform_clustering_and_plot(traj_embeddings, amount_initial_centers, max_clusters, ccore=False,plot=True):
+def perform_clustering_and_plot(traj_embeddings, amount_initial_centers, max_clusters, ccore=False,plot=True, path="./plots/qbert.png"):
     """
     Performs clustering on prepared trajectory embeddings using X-Means and plots the results.
 
@@ -239,7 +239,7 @@ def perform_clustering_and_plot(traj_embeddings, amount_initial_centers, max_clu
 
     if plot:
         # Plotting
-        plt.figure(figsize=(4,3))
+        plt.figure(figsize=(6, 5))
         palette = sns.color_palette('husl', len(clusters) + 1)
         sns.scatterplot(
             x='feature 1',
@@ -252,15 +252,20 @@ def perform_clustering_and_plot(traj_embeddings, amount_initial_centers, max_clu
         plt.title('Trajectory Embeddings for ' + str(amount_initial_centers) + ' initial centers')
         plt.legend(title = '$c_{j}$', loc='lower center', bbox_to_anchor=(0.5, 1.05), ncol=5)
         plt.tight_layout()
-        plt.show()
+        # Save the plot in high resolution
+        plt.savefig("/Users/joanvelja/Documents/GitHub/FACT/Breakout/seaquest_6x5.png", format='png', dpi=600)
+        plt.show()  # Optionally comment this line if you don't need to display the plot during execution
 
-        logger.info('Plot created.')
+        logger.info('High-resolution plot saved.')
 
     return clusters, traj_cluster_labels
 
 def trajectory_attributions_sq(test_observations, models, traj_embeddings, clusters):
     attributions = []
     data_embedding = get_data_embedding(traj_embeddings)
+    #print("Cluster size :", len(clusters))
+    #print(clusters)
+    clusters.insert(0, [])
     # First model is trained on full dataset
     # Second model is trained on cluster 1
     # Third model is trained on cluster 2 ...
@@ -441,7 +446,7 @@ def print_results_sq(result_data_combinations_sq, test_observations, models_sq, 
         action_comparison[data_combination_id] = 0
         for t in range(len(test_observations)):
             assert len(action_new) == len(test_observations)
-            print(action_comparison[data_combination_id], result_data_combinations_sq[0][0][t], action_new[t])
+            #print(action_comparison[data_combination_id], result_data_combinations_sq[0][0][t], action_new[t])
             if (action_new[t] == result_data_combinations_sq[0][0][t]):
                 action_comparison[data_combination_id] += 1
     print("-"*100)
