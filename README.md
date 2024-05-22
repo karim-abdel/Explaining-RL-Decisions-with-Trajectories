@@ -4,7 +4,7 @@ This repository contains the codebase for our reproducibility study on "Explaini
 
 ## Paper Links
 
-- Our paper: ["Explaining RL Decisions with Trajectories": A Reproducibility Study](https://openreview.net/forum?id=QdeBbK5CSh&referrer=%5Bthe%20profile%20of%20Matteo%20Nulli%5D(%2Fprofile%3Fid%3D~Matteo_Nulli1))
+- Our paper: ['Explaining RL Decisions with Trajectories': A Reproducibility Study](https://openreview.net/forum?id=QdeBbK5CSh&referrer=%5Bthe%20profile%20of%20Matteo%20Nulli%5D(%2Fprofile%3Fid%3D~Matteo_Nulli1))
 - Original paper: [Explaining RL Decisions with Trajectories](https://arxiv.org/abs/2305.04073)
 
 ## Project Structure
